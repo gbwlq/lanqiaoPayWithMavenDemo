@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- 加载数据库属性文件 -->
+<bean id="config" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+	<property name="locations">
+		<list>
+			<value>classpath:db.properties</value>
+		</list>
+	</property>
+</bean>
+<bean class="com.github.pagehelper.PageInterceptor"></bean>
+<!-- 配置数据库连接池(使用DBCP连接池) -->
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+   <property name="driverClassName" value="${driver}"/>
+   <property name="url" value="${url}"/>
+   <property name="username" value="${username}"/>
+   <property name="password" value="${password}"/>
+   
+   <property name="maxIdle" value="5"/> 
+ </bean> 
+<!-- 配置mapper -->
+<!-- 将MyBatis使用的SqlSessionFactory对象,交给Spring来管理 -->
+
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+<!--数据库连接池 -->
+	<property name="dataSource" ref="dataSource"></property>
+	<!--加载mybatis的全局配置文件 -->
+	<property name="mapperLocations" value="classpath:org/lanqiao/mapper/*.xml"></property>
+</bean>
+<!-- 通过Mapper扫描器MapperScannerConfigurer，批量将 
+basePackage指定包中的DAO接口全部生成Mapper动态代理对象 -->
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+	<property name="basePackage" value="org.lanqiao.mapper"></property>
+	<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+</bean>
+
+<bean id="userService" class="org.lanqiao.service.impl.UserServiceImpl">
+	<property name="userMapper" ref="userMapper"></property>
+</bean>
+
+</beans>
