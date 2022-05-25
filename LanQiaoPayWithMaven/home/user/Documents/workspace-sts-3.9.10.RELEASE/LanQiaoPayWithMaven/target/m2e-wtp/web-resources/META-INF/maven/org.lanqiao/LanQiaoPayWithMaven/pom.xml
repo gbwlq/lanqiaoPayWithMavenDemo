@@ -7,7 +7,7 @@
   
   <!-- 统一版本号  -->
   <properties>
-  	<spring.version>4.3.17.RELEASE</spring.version>
+  	<spring.version>5.2.22.RELEASE</spring.version>
   </properties>
   <dependencies>
   		<!-- https://mvnrepository.com/artifact/commons-dbcp/commons-dbcp -->
